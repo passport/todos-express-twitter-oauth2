@@ -1,6 +1,6 @@
 var express = require('express');
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth20');
+var TwitterStrategy = require('@superfaceai/passport-twitter-oauth2');
 var db = require('../db');
 
 
@@ -11,16 +11,21 @@ var db = require('../db');
 // behalf, along with the user's profile.  The function must invoke `cb`
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
-passport.use(new GoogleStrategy({
-  clientID: process.env['GOOGLE_CLIENT_ID'],
-  clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-  callbackURL: '/oauth2/redirect/google',
-  scope: [ 'profile' ],
-  state: true
+passport.use(new TwitterStrategy({
+  clientID: process.env['TWITTER_CLIENT_ID'],
+  clientSecret: process.env['TWITTER_CLIENT_SECRET'],
+  clientType: 'confidential',
+  callbackURL: '/oauth2/redirect/twitter',
+  scope: [ 'users.read', 'tweet.read' ],
+  xstate: true
 },
 function(accessToken, refreshToken, profile, cb) {
+  console.log(accessToken);
+  console.log(refreshToken);
+  console.log(profile);
+  
   db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
-    'https://accounts.google.com',
+    'https://twitter.com',
     profile.id
   ], function(err, row) {
     if (err) { return cb(err); }
@@ -32,7 +37,7 @@ function(accessToken, refreshToken, profile, cb) {
         var id = this.lastID;
         db.run('INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)', [
           id,
-          'https://accounts.google.com',
+          'https://twitter.com',
           profile.id
         ], function(err) {
           if (err) { return cb(err); }
@@ -101,7 +106,7 @@ router.get('/login', function(req, res, next) {
  * Once Google has completed their interaction with the user, the user will be
  * redirected back to the app at `GET /oauth2/redirect/accounts.google.com`.
  */
-router.get('/login/federated/google', passport.authenticate('google'));
+router.get('/login/federated/twitter', passport.authenticate('twitter'));
 
 /*
     This route completes the authentication sequence when Google redirects the
@@ -109,7 +114,7 @@ router.get('/login/federated/google', passport.authenticate('google'));
     automatically created and their Google account is linked.  When an existing
     user returns, they are signed in to their linked account.
 */
-router.get('/oauth2/redirect/google', passport.authenticate('google', {
+router.get('/oauth2/redirect/twitter', passport.authenticate('twitter', {
   successReturnToOrRedirect: '/',
   failureRedirect: '/login'
 }));

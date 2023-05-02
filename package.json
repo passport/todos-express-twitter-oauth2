@@ -44,7 +44,7 @@
     "mkdirp": "^1.0.4",
     "morgan": "~1.9.1",
     "passport": "^0.5.2",
-    "passport-twitter-oauth2": "^2.0.0",
+    "@superfaceai/passport-twitter-oauth2": "^1.2.3",
     "pluralize": "^8.0.0",
     "sqlite3": "^5.0.2"
   }
