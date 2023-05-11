@@ -38,7 +38,7 @@ Navigate to [`http://localhost:3000`](http://localhost:3000).
 ## Overview
 
 This example illustrates how to use Passport and the [`passport-twitter-oauth20`](https://www.passportjs.org/packages/passport-twitter-oauth20/)
-strategy within an Express application to sign users in with [Google](https://www.google.com)
+strategy within an Express application to sign users in with [Twitter](https://twitter.com)
 via OAuth 2.0.
 
 This app implements the features of a typical [TodoMVC](https://todomvc.com/)
