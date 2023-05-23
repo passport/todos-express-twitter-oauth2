@@ -19,10 +19,6 @@ passport.use(new TwitterStrategy({
   scope: [ 'tweet.read' ]
 },
 function(accessToken, refreshToken, profile, cb) {
-  console.log(accessToken);
-  console.log(refreshToken);
-  console.log(profile);
-  
   db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
     'https://twitter.com',
     profile.id
