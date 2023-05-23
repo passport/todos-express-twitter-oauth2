@@ -16,8 +16,7 @@ passport.use(new TwitterStrategy({
   clientSecret: process.env['TWITTER_CLIENT_SECRET'],
   clientType: 'confidential',
   callbackURL: '/oauth2/redirect/twitter',
-  scope: [ 'users.read', 'tweet.read' ],
-  xstate: true
+  scope: [ 'tweet.read' ]
 },
 function(accessToken, refreshToken, profile, cb) {
   console.log(accessToken);
